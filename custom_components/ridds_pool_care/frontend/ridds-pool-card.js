@@ -1,5 +1,5 @@
 /*
- * Ridd's Pool Card — served by the Ridd's Pool Care integration.
+ * Ridd's Pool Card \u2014 served by the Ridd's Pool Care integration.
  *
  *   type: custom:ridds-pool-card
  *   device_id: <a Ridd's Pool Care pool device>   # optional: first pool if omitted
@@ -82,10 +82,10 @@ function until(d) {
   return `in ${days} days`;
 }
 
-// "7.2–7.6" → [7.2, 7.6]; "below 0.3" → [0, 0.3]
+// "7.2\u20137.6" \u2192 [7.2, 7.6]; "below 0.3" \u2192 [0, 0.3]
 function parseIdeal(s) {
   if (typeof s !== "string") return null;
-  const m = s.match(/^\s*([\d.]+)\s*[–-]\s*([\d.]+)/);
+  const m = s.match(/^\s*([\d.]+)\s*[\u2013-]\s*([\d.]+)/);
   if (m) return [parseFloat(m[1]), parseFloat(m[2])];
   const b = s.match(/below\s*([\d.]+)/i);
   if (b) return [0, parseFloat(b[1])];
@@ -94,7 +94,7 @@ function parseIdeal(s) {
 
 function fmt(v) {
   const n = Number(v);
-  if (!isFinite(n)) return "—";
+  if (!isFinite(n)) return "\u2014";
   if (Math.abs(n) >= 1000) return n.toLocaleString(undefined, { maximumFractionDigits: 0 });
   return String(Math.round(n * 100) / 100);
 }
@@ -220,7 +220,7 @@ class RiddsPoolCard extends HTMLElement {
     }
   }
 
-  // ── pieces ────────────────────────────────────────────────────────────────
+  // \u2500\u2500 pieces \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 
   _ring(score, b) {
     const size = 132, stroke = 11, r = (size - stroke) / 2 - 2, c = 2 * Math.PI * r;
@@ -239,7 +239,7 @@ class RiddsPoolCard extends HTMLElement {
               style="filter:drop-shadow(0 0 6px ${b.color})"/>
           </g>
         </svg>
-        <div class="ring-num"><span>${score == null ? "—" : Math.round(score)}</span><small>${score == null ? "" : "/ 100"}</small></div>
+        <div class="ring-num"><span>${score == null ? "\u2014" : Math.round(score)}</span><small>${score == null ? "" : "/ 100"}</small></div>
       </div>`;
   }
 
@@ -257,7 +257,7 @@ class RiddsPoolCard extends HTMLElement {
           <polyline points="${line}" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
           <circle cx="${xs(pts.length - 1)}" cy="${ys(last.score)}" r="3" fill="${band(last.score).color}"/>
         </svg>
-        <span>trend · ${pts.length} tests</span>
+        <span>trend \u00b7 ${pts.length} tests</span>
       </div>`;
   }
 
@@ -283,11 +283,11 @@ class RiddsPoolCard extends HTMLElement {
       bar = `<div class="bar empty"></div>`;
     }
     const stale = has && a.tested_on && latestDate && a.tested_on !== latestDate;
-    const note = !has ? "Not tested yet" : stale ? `${esc(a.status && a.status !== "-" ? a.status : "")}${a.status && a.status !== "-" ? " · " : ""}${shortDate(a.tested_on)}` : esc(a.status && a.status !== "-" ? a.status : a.ideal_range ? "" : "Measured");
+    const note = !has ? "Not tested yet" : stale ? `${esc(a.status && a.status !== "-" ? a.status : "")}${a.status && a.status !== "-" ? " \u00b7 " : ""}${shortDate(a.tested_on)}` : esc(a.status && a.status !== "-" ? a.status : a.ideal_range ? "" : "Measured");
     return `
       <button class="tile ${has ? "" : "dim"}" data-entity="${s.entity_id}" style="--c:${color}">
         <div class="t-label">${esc(label)}</div>
-        <div class="t-val">${has ? fmt(s.state) : "—"}<small>${has && unit ? esc(unit) : ""}</small></div>
+        <div class="t-val">${has ? fmt(s.state) : "\u2014"}<small>${has && unit ? esc(unit) : ""}</small></div>
         ${bar}
         <div class="t-note">${note}</div>
       </button>`;
@@ -311,7 +311,7 @@ class RiddsPoolCard extends HTMLElement {
 
   _recordBody(a, skipAdvice = false) {
     const parts = [];
-    if (a.by || a.date) parts.push(`<div class="by">${esc(a.by || "")}${a.by && a.date ? " · " : ""}${esc(shortDate(a.date))}</div>`);
+    if (a.by || a.date) parts.push(`<div class="by">${esc(a.by || "")}${a.by && a.date ? " \u00b7 " : ""}${esc(shortDate(a.date))}</div>`);
     const chips = [...(a.work || []), ...(a.conditions || []).map((c) => `Water: ${c}`)];
     if (chips.length) parts.push(`<div class="chips">${chips.map((c) => `<span>${esc(c)}</span>`).join("")}</div>`);
     if (a.readings) {
@@ -320,7 +320,7 @@ class RiddsPoolCard extends HTMLElement {
         .map(([k, r]) => `<span><b>${esc((CHEM.find((c) => c[0] === k) || [k, k])[1])}</b> ${fmt(r.value)}${r.status && r.status !== "-" ? ` <i>${esc(r.status)}</i>` : ""}</span>`)
         .join("")}</div>`);
     }
-    const details = (a.details || []).filter((d) => !/^Done: |^Water: |^Water looked: /.test(d) && !(skipAdvice && / — /.test(d)));
+    const details = (a.details || []).filter((d) => !/^Done: |^Water: |^Water looked: /.test(d) && !(skipAdvice && / \u2014 /.test(d)));
     if (details.length) parts.push(`<ul>${details.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>`);
     if (a.spares?.length) parts.push(`<div class="by">Spares: ${esc(a.spares.join(", "))}</div>`);
     const url = safeUrl(a.report_url);
@@ -328,7 +328,7 @@ class RiddsPoolCard extends HTMLElement {
     return parts.join("") || `<div class="by">No further detail recorded.</div>`;
   }
 
-  // ── render ────────────────────────────────────────────────────────────────
+  // \u2500\u2500 render \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 
   _render() {
     if (!this._hass || !this._config) return;
@@ -369,7 +369,7 @@ class RiddsPoolCard extends HTMLElement {
       : "";
 
     // What needs doing, straight from the last test's advice.
-    const advice = (ta.details || []).filter((d) => / — /.test(d));
+    const advice = (ta.details || []).filter((d) => / \u2014 /.test(d));
     const offenders = CHEM.filter(([k]) => {
       const v = this._st(k)?.attributes?.verdict;
       return (v === "low" || v === "high") && this._st(k)?.attributes?.tested_on === ta.date;
@@ -381,7 +381,7 @@ class RiddsPoolCard extends HTMLElement {
       const todo = advice.length
         ? `<div class="todo"><div class="todo-h">What to do</div><ol>${advice.map((d) => `<li>${esc(d)}</li>`).join("")}</ol></div>`
         : "";
-      const summary = attention && offenders.length ? `Needs attention: ${offenders.join(" · ")}` : test.state;
+      const summary = attention && offenders.length ? `Needs attention: ${offenders.join(" \u00b7 ")}` : test.state;
       sections.push(this._section("test", ICONS.test, "Last water test", summary, ago(ta.date),
         todo + this._recordBody(ta, !!todo),
         ta.overall === "attention" ? VERDICT_COLOR.low : ta.overall === "fair" ? VERDICT_COLOR.fair : VERDICT_COLOR.ok));
@@ -397,11 +397,11 @@ class RiddsPoolCard extends HTMLElement {
       const body = `<div class="timeline">${records.map((r) => {
         const dot = r.overall === "attention" ? VERDICT_COLOR.low : r.overall === "fair" ? VERDICT_COLOR.fair : r.overall === "ok" ? VERDICT_COLOR.ok : "var(--rp-muted)";
         return `<div class="ev"><i style="background:${dot}"></i>
-          <div><div class="ev-head"><ha-icon icon="${ICONS[r.kind] || ICONS.history}"></ha-icon>${esc(shortDate(r.date))} · ${esc(r.by || "")}${typeof r.score === "number" ? `<span class="pill" style="--p:${band(r.score).color}">${r.score}</span>` : ""}</div>
+          <div><div class="ev-head"><ha-icon icon="${ICONS[r.kind] || ICONS.history}"></ha-icon>${esc(shortDate(r.date))} \u00b7 ${esc(r.by || "")}${typeof r.score === "number" ? `<span class="pill" style="--p:${band(r.score).color}">${r.score}</span>` : ""}</div>
           <div class="ev-sum">${esc(r.summary || "")}</div></div></div>`;
       }).join("")}</div>`;
       const a = hist.attributes;
-      sections.push(this._section("history", ICONS.history, "History", `${a.tests ?? 0} tests · ${a.visits ?? 0} visits · ${a.maintenance ?? 0} maintenance`, "", body, "var(--rp-muted)"));
+      sections.push(this._section("history", ICONS.history, "History", `${a.tests ?? 0} tests \u00b7 ${a.visits ?? 0} visits \u00b7 ${a.maintenance ?? 0} maintenance`, "", body, "var(--rp-muted)"));
     }
 
     const status = attention
@@ -418,9 +418,9 @@ class RiddsPoolCard extends HTMLElement {
           ${this._ring(score, b)}
           <div class="hero-text">
             <div class="name">${esc(this._deviceName)}</div>
-            ${metaBits.length ? `<div class="meta">${esc(metaBits.join(" · "))}</div>` : ""}
+            ${metaBits.length ? `<div class="meta">${esc(metaBits.join(" \u00b7 "))}</div>` : ""}
             <div class="status">${status}</div>
-            ${ta.date ? `<div class="tested">Tested ${esc(ago(ta.date))}${ta.by ? ` · ${esc(ta.by)}` : ""}${inRange ? ` · ${esc(inRange)}` : ""}</div>` : ""}
+            ${ta.date ? `<div class="tested">Tested ${esc(ago(ta.date))}${ta.by ? ` \u00b7 ${esc(ta.by)}` : ""}${inRange ? ` \u00b7 ${esc(inRange)}` : ""}</div>` : ""}
             ${this._spark(ha.trend)}
           </div>
         </div>
@@ -551,7 +551,7 @@ const STYLE = `<style>
   @media (prefers-reduced-motion: reduce) { .waves svg, .ring .arc, .sec-body { animation: none; transition: none; } }
 </style>`;
 
-// ── Visual editor ───────────────────────────────────────────────────────────
+// \u2500\u2500 Visual editor \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 
 const SCHEMA = [
   { name: "device_id", selector: { device: { integration: DOMAIN } } },
@@ -578,7 +578,7 @@ const SCHEMA = [
 
 const LABELS = {
   device_id: "Pool",
-  title: "Title (optional — defaults to the pool name)",
+  title: "Title (optional \u2014 defaults to the pool name)",
   show_chemistry: "Readings",
   show_test: "Last water test",
   show_visit: "Last service visit",
