@@ -26,10 +26,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 
 async def _async_register_card(hass: HomeAssistant) -> None:
-    if hass.http is None or "frontend" not in hass.config.components:
+    if hass.http is None:
         return
-    from homeassistant.components.frontend import add_extra_js_url
     from homeassistant.components.http import StaticPathConfig
+    from homeassistant.setup import async_when_setup
 
     try:
         # Content hash as the cache-buster: an update is picked up on the next
@@ -41,9 +41,18 @@ async def _async_register_card(hass: HomeAssistant) -> None:
             [StaticPathConfig(CARD_URL, str(CARD_FILE), True)]
         )
     except (OSError, RuntimeError) as err:  # RuntimeError: path already registered
-        _LOGGER.debug("Ridd's Pool card not registered: %s", err)
+        _LOGGER.warning("Ridd's Pool card could not be served: %s", err)
         return
-    add_extra_js_url(hass, f"{CARD_URL}?v={digest}")
+
+    async def _add_to_frontend(hass: HomeAssistant, _component: str) -> None:
+        from homeassistant.components.frontend import add_extra_js_url
+
+        add_extra_js_url(hass, f"{CARD_URL}?v={digest}")
+        _LOGGER.debug("Ridd's Pool card added to the frontend")
+
+    # The frontend may still be starting when this runs; wait for it rather
+    # than silently skipping the card.
+    async_when_setup(hass, "frontend", _add_to_frontend)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: RiddsConfigEntry) -> bool:

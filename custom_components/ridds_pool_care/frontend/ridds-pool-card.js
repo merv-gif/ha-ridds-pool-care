@@ -11,7 +11,7 @@
  */
 
 const DOMAIN = "ridds_pool_care";
-const VERSION = "0.2.0";
+const VERSION = "0.2.1";
 
 const CHEM = [
   ["free_chlorine", "Chlorine"],
