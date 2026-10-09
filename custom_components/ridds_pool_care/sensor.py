@@ -33,7 +33,7 @@ MAX_STATE = 255
 
 # Attributes that are useful on a card but pointless (and large) in history.
 BIG_ATTRS = frozenset(
-    {"details", "history", "readings", "equipment", "christina", "report_url", "work", "conditions", "spares"}
+    {"details", "history", "readings", "equipment", "christina", "report_url", "work", "conditions", "spares", "trend"}
 )
 
 
@@ -52,7 +52,7 @@ CHEMISTRY: tuple[ChemDescription, ...] = (
                     native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION, icon="mdi:flask-outline"),
     ChemDescription(key="total_chlorine", translation_key="total_chlorine",
                     native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION, icon="mdi:flask-outline"),
-    ChemDescription(key="ph", device_class=SensorDeviceClass.PH),
+    ChemDescription(key="ph", translation_key="ph", device_class=SensorDeviceClass.PH),
     ChemDescription(key="alkalinity", translation_key="alkalinity",
                     native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION, icon="mdi:water-opacity"),
     ChemDescription(key="stabiliser", translation_key="stabiliser",
@@ -214,7 +214,29 @@ def _details_attrs(pool: dict[str, Any]) -> dict[str, Any]:
     return attrs
 
 
+def _health_attrs(pool: dict[str, Any]) -> dict[str, Any] | None:
+    h = pool.get("health")
+    if not h:
+        return None
+    return {
+        "label": h.get("label"),
+        "in_range": h.get("in_range"),
+        "measured": h.get("measured"),
+        "tested_on": (pool.get("latest_chemistry") or {}).get("date"),
+        "trend": pool.get("score_trend") or [],
+    }
+
+
 POOL_SENSORS: tuple[PoolDescription, ...] = (
+    PoolDescription(
+        key="health_score",
+        translation_key="health_score",
+        native_unit_of_measurement="%",
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:heart-pulse",
+        value_fn=lambda p: (p.get("health") or {}).get("score"),
+        attrs_fn=_health_attrs,
+    ),
     PoolDescription(
         key="water_status",
         translation_key="water_status",

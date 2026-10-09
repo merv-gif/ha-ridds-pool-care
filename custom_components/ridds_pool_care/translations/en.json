@@ -4,13 +4,19 @@
       "user": {
         "title": "Connect Ridd's Pool Care",
         "description": "In the Ridd's Pool Care app open **Account → Home Assistant** ([{key_url}]({key_url})), create a key and paste it here. Home Assistant can read your pools; it can never change anything in the app.",
-        "data": { "api_key": "Integration key" },
-        "data_description": { "api_key": "Starts with ridds_ha_" }
+        "data": {
+          "api_key": "Integration key"
+        },
+        "data_description": {
+          "api_key": "Starts with ridds_ha_"
+        }
       },
       "reauth_confirm": {
         "title": "Ridd's Pool Care key no longer works",
         "description": "The key was revoked in the app, or the account is no longer a pool owner account. Create a new key at [{key_url}]({key_url}) and paste it here.",
-        "data": { "api_key": "Integration key" }
+        "data": {
+          "api_key": "Integration key"
+        }
       }
     },
     "error": {
@@ -25,27 +31,71 @@
   },
   "entity": {
     "binary_sensor": {
-      "needs_attention": { "name": "Water needs attention" },
-      "service_due": { "name": "Service due" }
+      "needs_attention": {
+        "name": "Water needs attention"
+      },
+      "service_due": {
+        "name": "Service due"
+      }
     },
     "sensor": {
-      "free_chlorine": { "name": "Free chlorine" },
-      "total_chlorine": { "name": "Total chlorine" },
-      "alkalinity": { "name": "Alkalinity" },
-      "stabiliser": { "name": "Stabiliser (CYA)" },
-      "salt": { "name": "Salt" },
-      "calcium_hardness": { "name": "Calcium hardness" },
-      "iron": { "name": "Iron" },
-      "copper": { "name": "Copper" },
-      "bromine": { "name": "Bromine" },
-      "tds": { "name": "Total dissolved solids" },
-      "ammonia": { "name": "Ammonia" },
-      "nitrite": { "name": "Nitrite" },
-      "nitrate": { "name": "Nitrate" },
-      "kh": { "name": "Carbonate hardness (KH)" },
-      "gh": { "name": "General hardness (GH)" },
-      "dissolved_oxygen": { "name": "Dissolved oxygen" },
-      "water_temp": { "name": "Water temperature" },
+      "health_score": {
+        "name": "Health score"
+      },
+      "ph": {
+        "name": "pH"
+      },
+      "free_chlorine": {
+        "name": "Free chlorine"
+      },
+      "total_chlorine": {
+        "name": "Total chlorine"
+      },
+      "alkalinity": {
+        "name": "Alkalinity"
+      },
+      "stabiliser": {
+        "name": "Stabiliser (CYA)"
+      },
+      "salt": {
+        "name": "Salt"
+      },
+      "calcium_hardness": {
+        "name": "Calcium hardness"
+      },
+      "iron": {
+        "name": "Iron"
+      },
+      "copper": {
+        "name": "Copper"
+      },
+      "bromine": {
+        "name": "Bromine"
+      },
+      "tds": {
+        "name": "Total dissolved solids"
+      },
+      "ammonia": {
+        "name": "Ammonia"
+      },
+      "nitrite": {
+        "name": "Nitrite"
+      },
+      "nitrate": {
+        "name": "Nitrate"
+      },
+      "kh": {
+        "name": "Carbonate hardness (KH)"
+      },
+      "gh": {
+        "name": "General hardness (GH)"
+      },
+      "dissolved_oxygen": {
+        "name": "Dissolved oxygen"
+      },
+      "water_temp": {
+        "name": "Water temperature"
+      },
       "water_status": {
         "name": "Water status",
         "state": {
@@ -55,17 +105,39 @@
           "unknown": "Not tested"
         }
       },
-      "last_water_test": { "name": "Last water test" },
-      "last_water_test_date": { "name": "Last water test date" },
-      "days_since_test": { "name": "Days since last test" },
-      "last_visit": { "name": "Last service visit" },
-      "last_visit_date": { "name": "Last service visit date" },
-      "last_maintenance": { "name": "Last maintenance log" },
-      "next_service": { "name": "Next service" },
-      "service_history": { "name": "Service history" },
-      "volume": { "name": "Volume" },
-      "pool_details": { "name": "Pool details" },
-      "pump_size": { "name": "Pump size" }
+      "last_water_test": {
+        "name": "Last water test"
+      },
+      "last_water_test_date": {
+        "name": "Last water test date"
+      },
+      "days_since_test": {
+        "name": "Days since last test"
+      },
+      "last_visit": {
+        "name": "Last service visit"
+      },
+      "last_visit_date": {
+        "name": "Last service visit date"
+      },
+      "last_maintenance": {
+        "name": "Last maintenance log"
+      },
+      "next_service": {
+        "name": "Next service"
+      },
+      "service_history": {
+        "name": "Service history"
+      },
+      "volume": {
+        "name": "Volume"
+      },
+      "pool_details": {
+        "name": "Pool details"
+      },
+      "pump_size": {
+        "name": "Pump size"
+      }
     }
   }
 }

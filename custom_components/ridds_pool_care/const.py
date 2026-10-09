@@ -29,3 +29,6 @@ POOL_MODELS: Final = {
 }
 
 PLATFORMS: Final = ["binary_sensor", "sensor"]
+
+# The dashboard card this integration serves (frontend/ridds-pool-card.js).
+CARD_URL: Final = f"/{DOMAIN}/ridds-pool-card.js"

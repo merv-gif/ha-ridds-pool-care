@@ -1,6 +1,10 @@
 {
   "domain": "ridds_pool_care",
   "name": "Ridd's Pool Care",
+  "after_dependencies": [
+    "frontend",
+    "http"
+  ],
   "codeowners": [
     "@merv-gif"
   ],
@@ -13,5 +17,5 @@
     "custom_components.ridds_pool_care"
   ],
   "requirements": [],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

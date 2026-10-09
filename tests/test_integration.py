@@ -104,6 +104,14 @@ async def test_pool_entities(hass: HomeAssistant, aioclient_mock, snapshot) -> N
     # Stabiliser is a base sensor for a pool but has never been tested.
     assert hass.states.get("sensor.main_pool_stabiliser_cya").state == "unknown"
 
+    # Health score — the app's number, with its band and trend.
+    health = hass.states.get("sensor.main_pool_health_score")
+    assert health.state == "66"
+    assert health.attributes["label"] == "Attention"
+    assert health.attributes["unit_of_measurement"] == "%"
+    assert [p["score"] for p in health.attributes["trend"]] == [64, 100, 82, 91, 66]
+    assert hass.states.get("sensor.koi_pond_health_score").state == "unknown"
+
     # Summaries.
     assert hass.states.get("sensor.main_pool_water_status").state == "attention"
     test = hass.states.get("sensor.main_pool_last_water_test")
@@ -180,3 +188,26 @@ async def test_diagnostics_redact(hass: HomeAssistant, hass_client, aioclient_mo
     assert KEY not in text
     assert "token=secret" not in text
     assert "Pat Owner" not in text
+
+
+async def test_card_is_served(hass: HomeAssistant, hass_client, aioclient_mock, snapshot) -> None:
+    """The dashboard card ships with the integration and is added to the frontend."""
+    from unittest.mock import patch
+
+    from homeassistant.setup import async_setup_component
+
+    from custom_components.ridds_pool_care.const import CARD_URL
+
+    assert await async_setup_component(hass, "http", {})
+    client = await hass_client()
+    hass.config.components.add("frontend")
+    with patch("homeassistant.components.frontend.add_extra_js_url") as add_js:
+        assert await async_setup_component(hass, DOMAIN, {})
+        await hass.async_block_till_done()
+    add_js.assert_called_once()
+    assert add_js.call_args[0][1].startswith(f"{CARD_URL}?v=")
+
+    resp = await client.get(CARD_URL)
+    assert resp.status == 200
+    body = await resp.text()
+    assert 'customElements.define("ridds-pool-card"' in body

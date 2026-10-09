@@ -58,6 +58,7 @@ The verdicts are the same ones the app, the PDF reports and Christina use.
 
 | Entity | State |
 |---|---|
+| Health score | 0–100, the app's pool health score (`label`: Healthy / Stable / Attention / Action needed, plus a `trend`) |
 | Water status | `In range` / `Acceptable` / `Needs attention` / `Not tested` |
 | Last water test | One-line summary, e.g. *Needs attention: Alkalinity low, pH high*. Full step-by-step advice in the `details` attribute |
 | Last service visit | e.g. *Routine service by Thabo — backwash, brushed, vacuumed — all readings in range*. Work done, spares, observations and a link to the PDF report in attributes |
@@ -69,6 +70,27 @@ The verdicts are the same ones the app, the PDF reports and Christina use.
 
 **Pool details** — volume, plus a *Pool details* sensor whose attributes hold
 surface, chlorination, heating, blanket, filter, pump and equipment details.
+
+## The Ridd's Pool card
+
+The integration ships its own dashboard card — no extra download. Edit a
+dashboard → **Add card** → search **Ridd's Pool Card**, and pick your pool.
+
+- The **health score** up top is the same number as the app's dashboard ring,
+  with a trend line of your recent tests.
+- Every reading as a tile, with a bar showing where it sits against Ridd's
+  ideal range. Tap a tile for its history.
+- **Last water test**, **last service visit**, **your maintenance** and
+  **history** open on tap. When the water needs work, the last test opens with
+  *What to do* first, doses worked out for your pool's volume.
+- Next service date, flagged when it's due.
+
+```yaml
+type: custom:ridds-pool-card
+device_id: <your pool>      # optional — the first pool if left out
+expand: test                # optional — open a section on load: test, visit or history
+show_maintenance: false     # optional — hide a section
+```
 
 ## Automations
 
