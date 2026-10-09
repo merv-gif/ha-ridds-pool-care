@@ -1,0 +1,17 @@
+{
+  "domain": "ridds_pool_care",
+  "name": "Ridd's Pool Care",
+  "codeowners": [
+    "@merv-gif"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/merv-gif/ha-ridds-pool-care",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/merv-gif/ha-ridds-pool-care/issues",
+  "loggers": [
+    "custom_components.ridds_pool_care"
+  ],
+  "requirements": [],
+  "version": "0.1.0"
+}
